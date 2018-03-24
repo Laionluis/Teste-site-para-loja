@@ -1,0 +1,277 @@
+<DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title> LojasKD </title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+<!--API viacep -->
+
+<script type="text/javascript" >
+
+function limpa_formulário_cep() {
+            //Limpa valores do formulário de cep.
+            document.getElementById('endereço').value=("");
+            document.getElementById('bairro').value=("");
+            document.getElementById('cidade').value=("");
+            document.getElementById('estado').value=("");
+    }
+
+    function meu_callback(conteudo) {
+        if (!("erro" in conteudo)) {
+            //Atualiza os campos com os valores.
+            document.getElementById('endereço').value=(conteudo.logradouro);
+            document.getElementById('bairro').value=(conteudo.bairro);
+            document.getElementById('cidade').value=(conteudo.localidade);
+            document.getElementById('estado').value=(conteudo.uf);
+        } //end if.
+        else {
+            //CEP não Encontrado.
+            limpa_formulário_cep();
+            alert("CEP não encontrado.");
+        }
+    }
+        
+    function pesquisacep(valor) {
+
+        //Nova variável "cep" somente com dígitos.
+        var cep = valor.replace(/\D/g, '');
+
+        //Verifica se campo cep possui valor informado.
+        if (cep != "") {
+
+            //Expressão regular para validar o CEP.
+            var validacep = /^[0-9]{8}$/;
+
+            //Valida o formato do CEP.
+            if(validacep.test(cep)) {
+
+                //Preenche os campos com "..." enquanto consulta webservice.
+                document.getElementById('endereço').value="...";
+                document.getElementById('bairro').value="...";
+                document.getElementById('cidade').value="...";
+                document.getElementById('estado').value="...";
+
+                //Cria um elemento javascript.
+                var script = document.createElement('script');
+
+                //Sincroniza com o callback.
+                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+
+                //Insere script no documento e carrega o conteúdo.
+                document.body.appendChild(script);
+                
+                
+				document.getElementById('endereço').readOnly = true;
+				document.getElementById('bairro').readOnly = true;
+				document.getElementById('cidade').readOnly = true;
+				document.getElementById('estado').readOnly = true;
+				
+
+            } //end if.
+            else {
+                //cep é inválido.
+                limpa_formulário_cep();
+                alert("Formato de CEP inválido.");
+            }
+        } //end if.
+        else {
+            //cep sem valor, limpa formulário.
+            limpa_formulário_cep();
+        }
+    };
+
+</script>
+
+<!-- End apicep -->
+	
+<script type="text/javascript" src="jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="jquery.maskedinput-1.1.4.pack.js"/></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#cep").mask("99.999-999");
+	});
+</script>
+
+</head>
+<body>
+
+	<!-- barra nav -->
+	<ul class="nav">
+
+		<!-- logo -->
+
+		<div class="logo">
+			<a href="formulario.html">LojasKD</a>
+		</div>
+
+		<!-- end logo -->
+
+		<li><a href="#Banner">Banner</a></li>	
+		<li><a href="#Formulario">Formulario</a></li>	
+	</ul>
+
+	<!-- end barra nav -->
+
+	<!-- Banner -->
+	
+	<a name="Banner"/>
+		<div class="heading">Confira ambientes decorados no tamanho ideal para a sua sala de jantar</div>
+			<div align="center" class="services">
+				<div class="service1">
+						<a href="#" ><img class="image" onclick="mudaCor(0)" src="ima/0.png"></a>
+					<p class="test"> 6m² </p>
+				</div>
+
+				<div class="service1">
+						<a href="#1" ><img class="image" onclick="mudaCor(1)" src="ima/1.png"></a>
+					<p class="test"> 7m² </p>
+				</div>
+
+				<div class="service1">
+						<a href="#2" ><img class="image" onclick="mudaCor(2)" src="ima/2.png"></a>
+					<p class="test"> 8m² </p>
+				</div>
+
+				<div class="service1">
+						<a href="#3" ><img class="image" onclick="mudaCor(3)" src="ima/3.png"></a>
+					<p class="test"> 9m² </p>
+				</div>
+
+				<div class="service1">
+						<a href="#4" ><img class="image" onclick="mudaCor(4)" src="ima/4.png"></a>
+					<p class="test"> 10m² </p>
+				</div>
+
+				<div class="service1">
+						<a href="#5" ><img class="image" onclick="mudaCor(5)" src="ima/5.png"></a>
+					<p class="test"> 11m² </p>
+				</div>
+
+				<div class="service1">
+						<a href="#6" ><img class="image" onclick="mudaCor(6)" src="ima/6.png"></a>
+					<p class="test"> 12m² </p>
+				</div>
+
+			</div>
+	
+	<script>
+	function mudaCor(i) {
+	    var x = document.getElementsByClassName("service1");
+	    var w = document.getElementsByClassName("image");
+	    var n = document.getElementsByClassName("test");
+	    x[i].style.backgroundColor = "white";
+	    x[i].style.width = "105px";
+	    x[i].style.border = "2px solid #c1c1c1";
+	    var s = parse('ima/%s_1.png',i);
+	    w[i].src=s;
+	    n[i].style.color="c58fbf";
+	    for (y = 0; y < 9; y++) {
+	    	if (y != i) {
+		    	x[y].style.backgroundColor = "#c58fbf";
+			    x[y].style.width = "100px";
+			    x[y].style.border = "1px solid #c1c1c1";
+			    w[y].src=parse('ima/%s.png',y);
+			    n[y].style.color="ffffff";
+			}
+	    }
+	}
+
+	function parse(str) {
+    var args = [].slice.call(arguments, 1),
+        i = 0;
+
+    return str.replace(/%s/g, function() {
+        return args[i++];
+    });
+}
+
+	</script>
+
+	<!-- End Banner -->
+
+	<!-- Formulario -->
+
+	<a name="Formulario"/>
+		<div class="formulario">Formulario</div>	
+
+		<form action="." method="get" onsubmit="return valida_dados(this)">
+			<div>
+				<label for="id endereço">ID do Endereço:</label>
+				<input type="text" id="idendereço" name="user_id_end">
+			</div>
+			<div>
+				<label for="cep">CEP:</label>
+				<input type="text" id="cep" name="user_cep" onblur="pesquisacep(this.value)">
+			</div>		
+			<div>
+				<label for="endereço">Endereço:</label>
+				<input type="text" id="endereço" name="user_endereço">
+			</div>			
+			<div>
+				<label for="numero">Número:</label>
+				<input type="text" id="numero" name="user_numero">
+			</div>		
+			<div>
+				<label for="complemento">Complemento:</label>
+				<input type="text" id="complemento" name="user_complemento">
+			</div>		
+			<div>
+				<label for="bairro">Bairro:</label>
+				<input type="text" id="bairro" name="user_bairro">
+			</div>		
+			<div>
+				<label for="estado">Estado:</label>
+				<input type="text" id="estado" name="user_estado">
+			</div>		
+			<div>
+				<label for="cidade">Cidade:</label>
+				<input type="text" id="cidade" name="user_cidade">
+			</div>		
+			<div>
+				<label for="referencia">Referência para entrega:</label>
+				<input type="text" id="referencia" name="user_referencia">
+			</div>		
+
+
+
+
+			<!-- Verifica validacão dos dados -->
+
+			<script type="text/javascript">
+				function valida_dados(formulario){
+
+					if(formulario.idendereço.value == ""){
+						alert("Digite a identificação de endereço")
+						return false;
+					}
+					if(formulario.cep.value == ""){
+						alert("Digite o cep")
+						return false;
+					}
+					if(formulario.endereço.value == ""){
+						alert("Digite o endereço");
+						return false;
+					}
+					if(formulario.estado.value == ""){
+						alert("Digite o estado")
+						return false;
+					}
+					if(formulario.cidade.value == ""){
+						alert("Digite a cidade")
+						return false;
+					}
+					return true;
+				}
+			</script>
+
+			<div class="button">
+		        <button type="submit">Concluir</button>
+		    </div>
+
+		</form>
+
+<script src="vanilla-masker.min.js"></script>
+</body>
+</html>
